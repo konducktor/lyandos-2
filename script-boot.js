@@ -14,10 +14,12 @@ async function readFileRaw(name) {
         return response;
     } catch (error) {
         console.error(error);
+        throw error;
     }
 }
 async function readFile(filename) {
-    const name = filename.trim().split("/").slice(-1).join("/");
+    const parts = filename.trim().split("/");
+    const name = parts.slice(-1)[0];
 
     bootecho(`Reading file ${filename}`);
     return {
@@ -35,7 +37,7 @@ function isExecutable(file) {
 function loadScript(file) {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.textContent = `function ${file.displayName}(args) {
+    script.textContent = `async function ${file.displayName}(args) {
         ${file.content}
     }`;
 

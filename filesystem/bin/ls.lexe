@@ -1,4 +1,4 @@
-let files = getDirContents(CURRENTDIR);
+let files = await getDirContents(CURRENTDIR);
 for (let i = 0; i < files.length; i++) {
-    charout(files[i] + "\n");
+    await charout(files[i] + "\n");
 }
