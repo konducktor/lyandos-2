@@ -1,0 +1,20 @@
+{
+    "files": [
+    ],
+    "subdirs": {
+        "bin": {
+            "files": [
+                "charout.lexe",
+                "clear.lexe",
+                "debug.lexe",
+                "echo.lexe",
+                "error.lexe"
+            ]
+        },
+        "sbin": {
+            "files": [
+                "intro.lexe"
+            ]
+        }
+    }
+}

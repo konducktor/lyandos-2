@@ -1,0 +1,12 @@
+// if everything would be async
+
+if (args == null) {
+    return "No argument provided.";
+}
+
+if (args.split(" ").length > 1) {
+    return "More than 1 argument provided.";
+}
+
+await new Promise(resolve => setTimeout(resolve, parseInt(args)));
+return 0;

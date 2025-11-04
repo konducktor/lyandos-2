@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LyandOS 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:ital@0;1&display=swap" rel="stylesheet">
+</head>
+<body>
+    <textarea id="console" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
+    <script>
+        OS_CONSOLE = document.getElementById("console");
+        const bootecho = (text) => {OS_CONSOLE.value += `BOOTECHO:    ${text}\n`};
+    </script>
+    <script>bootecho("textarea loaded")</script>
+
+    <script>bootecho("loading script-boot.js")</script>
+    <script src="script-boot.js"></script>
+    <script>bootecho("script-boot.js loaded")</script>
+
+    <script src="command-executor.js"></script>
+    <script>bootecho("command-executor.js loaded")</script>
+
+    <script src="console-manager.js"></script>
+    <script>bootecho("console-manager.js loaded")</script>
+</body>
+
+<style>
+    html {
+        background-color: black;
+        color: white;
+        font-family: "Cascadia Mono", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    textarea
+    {
+        font-family: "Cascadia Mono", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        
+        background-color: black;
+        color: white;
+        resize: none;
+
+        border: 0px;
+        padding: 0px;
+        border-radius: 0px;
+        outline: none;
+        
+        width: 100%;
+        height: 100%;
+
+        position: absolute;
+        bottom: 0;
+        overflow: hidden;
+    }
+</style>
+</html>

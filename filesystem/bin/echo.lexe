@@ -1,0 +1,9 @@
+if (args == "") {
+    return "No text to output.";
+}
+
+charout(`${args}
+
+`);
+
+return 0;
