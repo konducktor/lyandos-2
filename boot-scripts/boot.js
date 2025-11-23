@@ -1,34 +1,33 @@
-function boot() {
+async function boot() {
     OS_CONSOLE = document.getElementById("console");
 
     bootecho("boot.boot() started");
     bootecho("bootecho initialized locally");
     
-    const fileFunctions = {
-        "./boot-scripts/script-boot.js": "initializeFiles",
-        "./boot-scripts/command-executor.js": null,
-        "./boot-scripts/console-manager.js": null,
+    const scriptPaths = [
+        "./boot-scripts/script-boot.js",
+        "./boot-scripts/command-executor.js",
+        "./boot-scripts/console-manager.js",
+    ]
+
+    bootecho(`loading ${scriptPaths.length} boot scripts`);
+    for (const scriptPath of scriptPaths) {
+        bootecho(`loading ${scriptPath}`);
+        try {
+            await loadBootScript(scriptPath)
+            bootecho(`${scriptPath} loaded`);
+        } catch (err) {
+            bootecho(`Error loading ${scriptPath}.`);
+            bootecho("The system cannot be booted because an error occured while loading important scripts.");
+            return;
+        }
     }
 
-    bootecho(`loading ${Object.keys(fileFunctions).length} boot scripts`);
-    Object.keys(fileFunctions).forEach(scriptPath => {
-        const func = fileFunctions[scriptPath];
-        
-        bootecho(`loading ${scriptPath}`);
-        loadBootScript(scriptPath).then(() => {
-            bootecho(`${scriptPath} loaded`);
-            if (func != null) {
-                bootecho(`executing ${scriptPath}->${func.toString()}`);
-                eval(`${func}()`);
-                bootecho(`${scriptPath}->${func.toString()} executed`);
-            }
-        });
-
-        
-    });    
+    bootecho(`running initializeFiles()`);
+    initializeFiles();
 }
 
-function loadBootScript(src) {
+async function loadBootScript(src) {
     return new Promise((resolve, reject) => {
         const script = document.createElement("script");
         script.src = src;
