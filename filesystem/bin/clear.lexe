@@ -1,2 +1,0 @@
-document.getElementById("console").value = "";
-return 0;

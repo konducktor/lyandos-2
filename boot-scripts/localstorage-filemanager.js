@@ -24,19 +24,19 @@ function bootstrap(args) {
         "subdirs": {
             "bin": {
                 "files": {
-                    "charout.lexe": `
+                    "charout.lexe": String.raw`
 document.getElementById("console").value += args;
 return 0;
                     `,
-                    "clear.lexe": `
+                    "clear.lexe": String.raw`
 document.getElementById("console").value = "";
 return 0;
                     `,
-                    "debug.lexe": `
+                    "debug.lexe": String.raw`
 console.log(args);
 return 0;
                     `,
-                    "echo.lexe": `
+                    "echo.lexe": String.raw`
 if (args == "") {
     return "No text to output.";
 }
@@ -45,7 +45,7 @@ charout(args + "\n" + "\n");
 
 return 0;
                     `,
-                    "error.lexe": `
+                    "error.lexe": String.raw`
 const args_list = args.split(" ");
 charout("ERROR RUNNING SCRIPT" + args_list[0] + ":\n\t" + args_list.slice(1).join(" ") + "\n");
 return 0;
@@ -54,8 +54,8 @@ return 0;
             },
             "sbin": {
                 "files": {
-                    "intro.lexe": `
-logo = [                                                                                                                                              
+                    "intro.lexe": String.raw`
+logo = [
 '888                                  888 .d88888b.  .d8888b.  .d8888b.  ',
 '888                                  888d88P" "Y88bd88P  Y88bd88P  Y88b ',
 '888                                  888888     888Y88b.            888 ',
@@ -71,6 +71,7 @@ logo = [
 
 for(i = 0; i < logo.length; i++) {
     charout(logo[i]);
+    charout("\n");
 }
 
 enableCaret();
@@ -80,7 +81,7 @@ return 0;
             }
         }
     };
-
+    console.log(JSON.stringify(defaultFilesystem))
     localStorage.setItem("filesystem", JSON.stringify(defaultFilesystem));
     return 0;
 }

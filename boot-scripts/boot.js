@@ -29,7 +29,6 @@ async function boot() {
         initialazeFilesystem();
     } catch (err) {
         bootecho(err);
-        enableCaret();
         return;
     }
     
@@ -38,6 +37,7 @@ async function boot() {
     bootecho(`initializeFiles() finished`);
     bootecho(`running intro.lexe`);
     intro("");
+    bootecho = undefined;
 }
 
 async function loadBootScript(src) {
@@ -45,7 +45,7 @@ async function loadBootScript(src) {
         const script = document.createElement("script");
         script.src = src;
         script.onload = () => resolve();
-        script.onerror = () => reject(new Error("Не удалось загрузить скрипт: " + src));
+        script.onerror = () => reject(new Error("Error loading: " + src));
         document.head.appendChild(script);
     });
 }

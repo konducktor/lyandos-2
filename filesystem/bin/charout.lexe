@@ -1,2 +1,0 @@
-document.getElementById("console").value += args;
-return 0;
