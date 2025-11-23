@@ -1,5 +1,6 @@
-let CURRENT_DIR = {}
-let CURRENT_PATH = ''
+let CURRENT_DIR = {};
+let CURRENT_PATH = '';
+let PREVIOUS_DIR = {};
 
 function initialazeFilesystem() {
     const filesystemRaw = localStorage.getItem("filesystem");
@@ -12,7 +13,6 @@ function initialazeFilesystem() {
 
     CURRENT_DIR = filesystem;
     CURRENT_PATH = 'filesystem/';
-    console.log(CURRENT_DIR);
 }
 
 function bootstrap(args) {
@@ -33,15 +33,16 @@ function bootstrap(args) {
                 "files": {
                     "ls.lexe": String.raw`
 for (let dir of Object.keys(CURRENT_DIR.subdirs)) {charout(dir);charout("/\n");}
-for (let file of Object.keys(CURRENT_DIR.files)) { charout(file);charout("\n");}
-return 0;
+for (let file of Object.keys(CURRENT_DIR.files)) { charout(file);charout("\n");} return 0;
                     `,
                     "cd.lexe": String.raw`
-if (args == "") {return "No text to output.";}
+if (args == "") {CURRENT_DIR = localStorage.getItem("filesystem"); CURRENT_PATH = "filesystem/"; return 0;}
+console.log(args);
+if (args == "/") {CURRENT_DIR = PREVIOUS_DIR; CURRENT_PATH = CURRENT_PATH.replace(/[^/]+\/$/, ""); return 0;}
 if (!(args in CURRENT_DIR.subdirs)) {return "Directory not found in current";}
-CURRENT_DIR = CURRENT_DIR.subdirs[args];
-return 0;
-                    `
+PREVIOUS_DIR = CURRENT_DIR; CURRENT_DIR = CURRENT_DIR.subdirs[args]; CURRENT_PATH += args + "/"; return 0;
+                    `,
+                    "pwd.lexe": String.raw`charout(CURRENT_PATH); charout("\n"); return 0;`
                 },
                 "subdirs": {}
             },
@@ -79,7 +80,8 @@ logo = [
 ];
 for(i = 0; i < logo.length; i++) { charout(logo[i]);charout("\n"); } enableCaret(); return 0;
                     `
-                }
+                },
+                "subdirs": {}
             },
         }
     };
