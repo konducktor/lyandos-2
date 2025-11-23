@@ -1,10 +1,18 @@
-function initialazeFilesystem() {
-    const filesystem = localStorage.getItem("filesystem");
+let CURRENT_DIR = {}
+let CURRENT_PATH = ''
 
-    if (filesystem == null) {
-        throw Error(`filesystem not setup. Use "bootstrap" to setup from scratch (or "bootstrap <link>" from link)`);
+function initialazeFilesystem() {
+    const filesystemRaw = localStorage.getItem("filesystem");
+
+    if (filesystemRaw == null) {
+        throw Error(`filesystem not setup. Use "bootstrap" ("bs") to setup from scratch`);
     }
 
+    const filesystem = JSON.parse(filesystemRaw);
+
+    CURRENT_DIR = filesystem;
+    CURRENT_PATH = 'filesystem/';
+    console.log(CURRENT_DIR);
 }
 
 function bootstrap(args) {
@@ -19,37 +27,38 @@ function bootstrap(args) {
     }
 
     const defaultFilesystem = {
-        "files": [
-        ],
+        "files": {},
         "subdirs": {
             "bin": {
                 "files": {
-                    "charout.lexe": String.raw`
-document.getElementById("console").value += args;
+                    "ls.lexe": String.raw`
+for (let dir of Object.keys(CURRENT_DIR.subdirs)) {charout(dir);charout("/\n");}
+for (let file of Object.keys(CURRENT_DIR.files)) { charout(file);charout("\n");}
 return 0;
                     `,
-                    "clear.lexe": String.raw`
-document.getElementById("console").value = "";
-return 0;
-                    `,
-                    "debug.lexe": String.raw`
-console.log(args);
-return 0;
-                    `,
-                    "echo.lexe": String.raw`
-if (args == "") {
-    return "No text to output.";
-}
-
-charout(args + "\n" + "\n");
-
-return 0;
-                    `,
-                    "error.lexe": String.raw`
-const args_list = args.split(" ");
-charout("ERROR RUNNING SCRIPT" + args_list[0] + ":\n\t" + args_list.slice(1).join(" ") + "\n");
+                    "cd.lexe": String.raw`
+if (args == "") {return "No text to output.";}
+if (!(args in CURRENT_DIR.subdirs)) {return "Directory not found in current";}
+CURRENT_DIR = CURRENT_DIR.subdirs[args];
 return 0;
                     `
+                },
+                "subdirs": {}
+            },
+            "usr": {
+                "files": [],
+                "subdirs": {
+                    "bin": {
+                        "files": {
+                            "charout.lexe": String.raw`document.getElementById("console").value += args;return 0;`,
+                            "clear.lexe": String.raw`document.getElementById("console").value = "";return 0;`,
+                            "debug.lexe": String.raw`console.log(args);return 0;`,
+                            "echo.lexe": String.raw`if (args == "") {return "No text to output.";} charout(args + "\n" + "\n"); return 0;`,
+                            "error.lexe": String.raw`const args_list = args.split(" "); charout("ERROR RUNNING SCRIPT " + args_list[0] + ":\n\t" + args_list.slice(1).join(" ") + "\n"); return 0;`,
+                            "reload.lexe": String.raw`window.location.reload(); return 0`
+                        },
+                        "subdirs": {}
+                    }
                 }
             },
             "sbin": {
@@ -68,20 +77,15 @@ logo = [
 '        Y8b d88P                                                        ',
 '         "Y88P"                                                         '
 ];
-
-for(i = 0; i < logo.length; i++) {
-    charout(logo[i]);
-    charout("\n");
-}
-
-enableCaret();
-return 0;
+for(i = 0; i < logo.length; i++) { charout(logo[i]);charout("\n"); } enableCaret(); return 0;
                     `
                 }
-            }
+            },
         }
     };
-    console.log(JSON.stringify(defaultFilesystem))
+
     localStorage.setItem("filesystem", JSON.stringify(defaultFilesystem));
+    window.location.reload();
     return 0;
 }
+const bs = bootstrap;
