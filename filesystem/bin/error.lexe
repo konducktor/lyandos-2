@@ -1,8 +1,0 @@
-const args_list = args.split(" ");
-
-charout(`ERROR RUNNING SCRIPT ${args_list[0]}:
-    ${args_list.slice(1).join(" ")}
-
-`);
-
-return 0;
