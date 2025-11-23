@@ -61,5 +61,4 @@ async function initializeFiles() {
 
     await initializeDirectory("", filesystemJson);
     bootecho("All scripts loaded");
-    intro("");
 }

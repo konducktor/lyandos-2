@@ -31,7 +31,12 @@ terminal.addEventListener("keydown", (e) => {
 
         terminal.value += "\n"
 
-        onNewCommand(command);
+        try {
+            onNewCommand(command);
+        } catch (error) {
+            console.error(error);
+            terminal.value += error + "\n"
+        }
         enableCaret();
     }
 });

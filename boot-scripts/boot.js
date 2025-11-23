@@ -5,6 +5,7 @@ async function boot() {
     bootecho("bootecho initialized locally");
     
     const scriptPaths = [
+        "./boot-scripts/localstorage-filemanager.js",
         "./boot-scripts/script-boot.js",
         "./boot-scripts/command-executor.js",
         "./boot-scripts/console-manager.js",
@@ -23,8 +24,20 @@ async function boot() {
         }
     }
 
+    bootecho("running initialezeFilesystem()");
+    try {
+        initialazeFilesystem();
+    } catch (err) {
+        bootecho(err);
+        enableCaret();
+        return;
+    }
+    
     bootecho(`running initializeFiles()`);
-    initializeFiles();
+    await initializeFiles();
+    bootecho(`initializeFiles() finished`);
+    bootecho(`running intro.lexe`);
+    intro("");
 }
 
 async function loadBootScript(src) {
