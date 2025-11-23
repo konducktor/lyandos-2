@@ -63,5 +63,3 @@ async function initializeFiles() {
     bootecho("All scripts loaded");
     intro("");
 }
-
-initializeFiles();

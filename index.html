@@ -8,21 +8,12 @@
 </head>
 <body>
     <textarea id="console" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
-    <script>
-        OS_CONSOLE = document.getElementById("console");
-        const bootecho = (text) => {OS_CONSOLE.value += `BOOTECHO:    ${text}\n`};
+    
+    <script src="boot-scripts/boot.js"></script><script>
+    let bootecho = (text) => {OS_CONSOLE.value += `BOOTECHO:    ${text}\n`; console.log(text)};
+    boot()
+    // bootecho = undefined;
     </script>
-    <script>bootecho("textarea loaded")</script>
-
-    <script>bootecho("loading script-boot.js")</script>
-    <script src="script-boot.js"></script>
-    <script>bootecho("script-boot.js loaded")</script>
-
-    <script src="command-executor.js"></script>
-    <script>bootecho("command-executor.js loaded")</script>
-
-    <script src="console-manager.js"></script>
-    <script>bootecho("console-manager.js loaded")</script>
 </body>
 
 <style>
