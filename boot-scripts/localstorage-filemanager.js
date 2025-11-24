@@ -1,6 +1,21 @@
+let ROOT = {};
 let CURRENT_DIR = {};
 let CURRENT_PATH = '';
-let PREVIOUS_DIR = {};
+
+function getDirFromPath(path) {
+    const dirs = path.split("/");
+    let currentDir = ROOT;
+
+    for (let i = 1; i < dirs.length-1; i++) {
+        let dir = dirs[i];
+
+        console.warn(dir, currentDir.subdirs);
+        if (!(dir in currentDir.subdirs)) return null;
+        currentDir = currentDir.subdirs[dir]
+    }
+
+    return currentDir;
+}
 
 function initialazeFilesystem() {
     const filesystemRaw = localStorage.getItem("filesystem");
@@ -11,8 +26,12 @@ function initialazeFilesystem() {
 
     const filesystem = JSON.parse(filesystemRaw);
 
-    CURRENT_DIR = filesystem;
+    ROOT = filesystem;
+    
+    CURRENT_DIR = ROOT;
     CURRENT_PATH = 'filesystem/';
+
+    console.warn(getDirFromPath('filesystem/usr/bin/'));
 }
 
 function bootstrap(args) {
@@ -36,9 +55,8 @@ for (let dir of Object.keys(CURRENT_DIR.subdirs)) {charout(dir);charout("/\n");}
 for (let file of Object.keys(CURRENT_DIR.files)) { charout(file);charout("\n");} return 0;
                     `,
                     "cd.lexe": String.raw`
-if (args == "") {CURRENT_DIR = localStorage.getItem("filesystem"); CURRENT_PATH = "filesystem/"; return 0;}
-console.log(args);
-if (args == "/") {CURRENT_DIR = PREVIOUS_DIR; CURRENT_PATH = CURRENT_PATH.replace(/[^/]+\/$/, ""); return 0;}
+if (args == "") {CURRENT_PATH = "filesystem/"; CURRENT_DIR = getDirFromPath(CURRENT_PATH); return 0;}
+if (args == "/") {CURRENT_PATH = CURRENT_PATH.replace(/[^/]+\/$/, ""); CURRENT_DIR = CURRENT_PATH; return 0;}
 if (!(args in CURRENT_DIR.subdirs)) {return "Directory not found in current";}
 PREVIOUS_DIR = CURRENT_DIR; CURRENT_DIR = CURRENT_DIR.subdirs[args]; CURRENT_PATH += args + "/"; return 0;
                     `,
