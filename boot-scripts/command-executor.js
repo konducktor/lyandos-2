@@ -1,5 +1,5 @@
 function onNewCommand(console_text) {
-  let command = console_text.trim().slice(2);
+  let command = console_text.trim().split(" > ")[1];
 
   parseCommand(command);
 }

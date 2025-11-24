@@ -1,5 +1,6 @@
 const terminal = document.getElementById("console");
 const caret = "> ";
+let prefix = "";
 
 terminal.addEventListener("keydown", (e) => {
     const lines = terminal.value.split("\n");
@@ -15,8 +16,8 @@ terminal.addEventListener("keydown", (e) => {
     }
 
     if (
-        (e.key === "Backspace" && caretPos <= lastLineStart + caret.length) ||
-        (e.key === "ArrowLeft" && caretPos <= lastLineStart + caret.length)
+        (e.key === "Backspace" && caretPos <= lastLineStart + prefix.length) ||
+        (e.key === "ArrowLeft" && caretPos <= lastLineStart + prefix.length)
     ) {
         e.preventDefault();
         return;
@@ -45,5 +46,6 @@ function enableCaret() {
     if (terminal.value.length > 0) {
         terminal.value += "\n"
     }
-    terminal.value += caret;
+    terminal.value += `${CURRENT_PATH} ${caret}`;
+    prefix = `${CURRENT_PATH} ${caret}`
 }
