@@ -45,5 +45,5 @@ function enableCaret() {
     if (terminal.value.length > 0) {
         terminal.value += "\n"
     }
-    terminal.value += caret;
+    terminal.value += `${CURRENT_PATH} ${caret}`;
 }
