@@ -29,6 +29,7 @@ async function boot() {
         initialazeFilesystem();
     } catch (err) {
         bootecho(err);
+        enableCaret();
         return;
     }
     
